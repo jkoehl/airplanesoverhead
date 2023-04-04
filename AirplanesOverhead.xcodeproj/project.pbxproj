@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F276333B29DB7E0900A03643 /* aircraft-types.json in Resources */ = {isa = PBXBuildFile; fileRef = F276333A29DB7E0900A03643 /* aircraft-types.json */; };
+		F276333D29DB809100A03643 /* aircraft-models.json in Resources */ = {isa = PBXBuildFile; fileRef = F276333C29DB809100A03643 /* aircraft-models.json */; };
+		F276333F29DB864000A03643 /* manufacturers.json in Resources */ = {isa = PBXBuildFile; fileRef = F276333E29DB864000A03643 /* manufacturers.json */; };
 		F281D8AE29D9BE6000CA3A4F /* AirplanesOverheadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F281D8AD29D9BE6000CA3A4F /* AirplanesOverheadApp.swift */; };
 		F281D8B029D9BE6000CA3A4F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F281D8AF29D9BE6000CA3A4F /* ContentView.swift */; };
 		F281D8B229D9BE6100CA3A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F281D8B129D9BE6100CA3A4F /* Assets.xcassets */; };
@@ -14,6 +17,8 @@
 		F281D8BF29D9BE6200CA3A4F /* AirplanesOverheadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F281D8BE29D9BE6200CA3A4F /* AirplanesOverheadTests.swift */; };
 		F281D8C929D9BE6200CA3A4F /* AirplanesOverheadUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F281D8C829D9BE6200CA3A4F /* AirplanesOverheadUITests.swift */; };
 		F281D8CB29D9BE6200CA3A4F /* AirplanesOverheadUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F281D8CA29D9BE6200CA3A4F /* AirplanesOverheadUITestsLaunchTests.swift */; };
+		F281D8D929D9C40E00CA3A4F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = F281D8D829D9C40E00CA3A4F /* Alamofire */; };
+		F281D8DC29D9C44F00CA3A4F /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = F281D8DB29D9C44F00CA3A4F /* SwiftyJSON */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F276333A29DB7E0900A03643 /* aircraft-types.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "aircraft-types.json"; path = "AirplanesOverhead/aircraft-types.json"; sourceTree = "<group>"; };
+		F276333C29DB809100A03643 /* aircraft-models.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "aircraft-models.json"; sourceTree = "<group>"; };
+		F276333E29DB864000A03643 /* manufacturers.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manufacturers.json; sourceTree = "<group>"; };
+		F276334029DBA38700A03643 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F281D8AA29D9BE6000CA3A4F /* AirplanesOverhead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirplanesOverhead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F281D8AD29D9BE6000CA3A4F /* AirplanesOverheadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirplanesOverheadApp.swift; sourceTree = "<group>"; };
 		F281D8AF29D9BE6000CA3A4F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -51,6 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F281D8DC29D9C44F00CA3A4F /* SwiftyJSON in Frameworks */,
+				F281D8D929D9C40E00CA3A4F /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +85,9 @@
 		F281D8A129D9BE6000CA3A4F = {
 			isa = PBXGroup;
 			children = (
+				F276333E29DB864000A03643 /* manufacturers.json */,
+				F276333C29DB809100A03643 /* aircraft-models.json */,
+				F276333A29DB7E0900A03643 /* aircraft-types.json */,
 				F281D8AC29D9BE6000CA3A4F /* AirplanesOverhead */,
 				F281D8BD29D9BE6200CA3A4F /* AirplanesOverheadTests */,
 				F281D8C729D9BE6200CA3A4F /* AirplanesOverheadUITests */,
@@ -94,6 +108,7 @@
 		F281D8AC29D9BE6000CA3A4F /* AirplanesOverhead */ = {
 			isa = PBXGroup;
 			children = (
+				F276334029DBA38700A03643 /* Info.plist */,
 				F281D8AD29D9BE6000CA3A4F /* AirplanesOverheadApp.swift */,
 				F281D8AF29D9BE6000CA3A4F /* ContentView.swift */,
 				F281D8B129D9BE6100CA3A4F /* Assets.xcassets */,
@@ -143,6 +158,10 @@
 			dependencies = (
 			);
 			name = AirplanesOverhead;
+			packageProductDependencies = (
+				F281D8D829D9C40E00CA3A4F /* Alamofire */,
+				F281D8DB29D9C44F00CA3A4F /* SwiftyJSON */,
+			);
 			productName = AirplanesOverhead;
 			productReference = F281D8AA29D9BE6000CA3A4F /* AirplanesOverhead.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +234,10 @@
 				Base,
 			);
 			mainGroup = F281D8A129D9BE6000CA3A4F;
+			packageReferences = (
+				F281D8D729D9C40E00CA3A4F /* XCRemoteSwiftPackageReference "Alamofire" */,
+				F281D8DA29D9C44F00CA3A4F /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+			);
 			productRefGroup = F281D8AB29D9BE6000CA3A4F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -231,6 +254,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F276333B29DB7E0900A03643 /* aircraft-types.json in Resources */,
+				F276333F29DB864000A03643 /* manufacturers.json in Resources */,
+				F276333D29DB809100A03643 /* aircraft-models.json in Resources */,
 				F281D8B529D9BE6100CA3A4F /* Preview Assets.xcassets in Resources */,
 				F281D8B229D9BE6100CA3A4F /* Assets.xcassets in Resources */,
 			);
@@ -417,8 +443,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AirplanesOverhead/Preview Content\"";
+				DEVELOPMENT_TEAM = V789X3M73U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AirplanesOverhead/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -445,8 +474,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AirplanesOverhead/Preview Content\"";
+				DEVELOPMENT_TEAM = V789X3M73U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AirplanesOverhead/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -577,6 +609,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F281D8D729D9C40E00CA3A4F /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		F281D8DA29D9C44F00CA3A4F /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F281D8D829D9C40E00CA3A4F /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F281D8D729D9C40E00CA3A4F /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		F281D8DB29D9C44F00CA3A4F /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F281D8DA29D9C44F00CA3A4F /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F281D8A229D9BE6000CA3A4F /* Project object */;
 }
