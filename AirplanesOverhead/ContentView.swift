@@ -3,6 +3,7 @@ import CoreLocation
 import Alamofire
 import SwiftyJSON
 import AVFoundation
+import MapKit
 
 struct Flight: Codable, Identifiable {
     let id: UUID = UUID()
@@ -61,6 +62,7 @@ struct FlightResponse: Decodable {
 
 struct ContentView: View {
     @State private var locationManager = CLLocationManager()
+    @State private var mapRegion = MKCoordinateRegion()
     @State private var aircraftData: [Flight] = []
     @State private var aircraftTypeLookup: [String: String]
     @State private var speechSynthesizer = AVSpeechSynthesizer()
@@ -102,6 +104,14 @@ struct ContentView: View {
             }
             .padding()
             .pickerStyle(SegmentedPickerStyle())
+            Map(coordinateRegion: $mapRegion, showsUserLocation: true, annotationItems: aircraftData) { flight in
+                MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: flight.last_position?.latitude ?? 0, longitude: flight.last_position?.longitude ?? 0)) {
+                    Image(systemName: "airplane")
+                        .foregroundColor(.red)
+                }
+            }
+            .frame(height: 300)
+            .edgesIgnoringSafeArea(.horizontal)
             Button(action: {
                 if let location = locationManager.location {
                     loading = true
@@ -152,6 +162,14 @@ struct ContentView: View {
         .onAppear {
             locationManager.requestWhenInUseAuthorization()
             locationManager.startUpdatingLocation()
+            setInitialMapRegion()
+        }
+    }
+
+    func setInitialMapRegion() {
+        if let userLocation = locationManager.location?.coordinate {
+            let span = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
+            mapRegion = MKCoordinateRegion(center: userLocation, span: span)
         }
     }
 
@@ -179,13 +197,13 @@ struct ContentView: View {
                         completion(flightResponse.flights)
                     }
                     self.loading = false
+                    self.setInitialMapRegion()
                 }
             case .failure(let error):
                 print("Error fetching aircraft data:", error)
             }
         }
     }
-
     
     func fetchAircraftDataFromPiaware(userLocation: CLLocation, searchRange: Double, completion: @escaping ([Flight]) -> Void) {
         let piawareURL = "http://piaware.local:8080/data/aircraft.json"
@@ -251,7 +269,6 @@ struct ContentView: View {
         }
     }
 
-
     func requestFromDB(icao: String, level: Int, onSuccess: @escaping (JSON) -> Void, onFailure: @escaping () -> Void) {
         let bkey = String(icao.prefix(level))
         let dkey = String(icao.suffix(icao.count - level))
@@ -274,7 +291,6 @@ struct ContentView: View {
             }
         }
     }
-
 
     func parsePiawareData(json: JSON) -> [Flight] {
         let aircraftArray = json["aircraft"].arrayValue
