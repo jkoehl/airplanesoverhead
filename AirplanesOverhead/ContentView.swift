@@ -69,7 +69,12 @@ struct ContentView: View {
     private let searchRadiusOptions = [1.0, 5.0, 10.0, 50.0]
     @State private var searchRadius = 5.0
     @State private var loading = false
-    
+    enum DataSource {
+        case flightAwareAPI
+        case localPiaware
+    }
+    @State private var dataSource: DataSource = .flightAwareAPI
+
     init() {
         guard let apiKey = Bundle.main.infoDictionary?["FlightAwareAPIKey"] as? String else {
             fatalError("FlightAware API key not found.")
@@ -91,13 +96,29 @@ struct ContentView: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
+            Picker("Data Source", selection: $dataSource) {
+                Text("FlightAware API").tag(DataSource.flightAwareAPI)
+                Text("Local Piaware").tag(DataSource.localPiaware)
+            }
+            .padding()
+            .pickerStyle(SegmentedPickerStyle())
             Button(action: {
                 if let location = locationManager.location {
                     loading = true
-                    fetchAircraftData(location: location, radius: searchRadius / 69.0) { aircraftData in
-                        self.aircraftData = aircraftData
-                        speakAircraftData()
-                        loading = false
+                    let radiusInKilometers = searchRadius * 1.60934 // Convert miles to kilometers
+                    switch dataSource {
+                    case .flightAwareAPI:
+                        fetchAircraftData(location: location, radius: radiusInKilometers) { aircraftData in
+                            self.aircraftData = aircraftData
+                            speakAircraftData()
+                            loading = false
+                        }
+                    case .localPiaware:
+                        fetchAircraftDataFromPiaware(userLocation: location, searchRange: radiusInKilometers) { aircraftData in
+                            self.aircraftData = aircraftData
+                            speakAircraftData()
+                            loading = false
+                        }
                     }
                 }
             }) {
@@ -138,7 +159,7 @@ struct ContentView: View {
         let baseURL = "https://aeroapi.flightaware.com/aeroapi/flights/search"
         let lat = location.coordinate.latitude
         let lon = location.coordinate.longitude
-        let query = "-latlong \"\(lat - radius) \(lon - radius) \(lat + radius) \(lon + radius)\""
+        let query = "-latlong \"\(lat - (radius / 69.0)) \(lon - (radius / 69.0)) \(lat + (radius / 69.0)) \(lon + (radius / 69.0))\""
 
         let parameters: [String: Any] = [
             "query": query
@@ -164,7 +185,128 @@ struct ContentView: View {
             }
         }
     }
+
     
+    func fetchAircraftDataFromPiaware(userLocation: CLLocation, searchRange: Double, completion: @escaping ([Flight]) -> Void) {
+        let piawareURL = "http://piaware.local:8080/data/aircraft.json"
+
+        AF.request(piawareURL, method: .get).responseData { response in
+            switch response.result {
+            case .success(let data):
+                let json = try! JSON(data: data)
+                let aircraftArray = json["aircraft"].arrayValue
+                var flights: [Flight] = []
+
+                let group = DispatchGroup()
+                for aircraft in aircraftArray {
+                    let aircraftLatitude = aircraft["lat"].doubleValue
+                    let aircraftLongitude = aircraft["lon"].doubleValue
+                    let aircraftLocation = CLLocation(latitude: aircraftLatitude, longitude: aircraftLongitude)
+
+                    // Calculate distance between user and aircraft
+                    let distanceInKilometers = userLocation.distance(from: aircraftLocation) / 1000
+
+                    // Check if the aircraft is within the search range
+                    if distanceInKilometers <= searchRange {
+                        let hexCode = aircraft["hex"].stringValue
+                        let icao = hexCode.uppercased()
+
+                        group.enter()
+                        requestFromDB(icao: icao, level: 1, onSuccess: { aircraftData in
+                            let flight = Flight(
+                                ident: aircraft["flight"].stringValue.trimmingCharacters(in: .whitespaces),
+                                fa_flight_id: nil,
+                                actual_off: nil,
+                                actual_on: nil,
+                                origin: nil,
+                                destination: nil,
+                                last_position: Flight.Position(
+                                    fa_flight_id: nil,
+                                    altitude: aircraft["alt_baro"].int,
+                                    altitude_change: nil,
+                                    groundspeed: aircraft["gs"].int,
+                                    heading: aircraft["track"].int,
+                                    latitude: aircraft["lat"].double,
+                                    longitude: aircraft["lon"].double,
+                                    timestamp: nil,
+                                    update_type: nil
+                                ),
+                                aircraft_type: aircraftData["t"].string
+                            )
+                            flights.append(flight)
+                            group.leave()
+                        }, onFailure: {
+                            group.leave()
+                        })
+                    }
+                }
+
+                group.notify(queue: .main) {
+                    completion(flights)
+                }
+            case .failure(let error):
+                print("Error fetching Piaware data: \(error)")
+                completion([])
+            }
+        }
+    }
+
+
+    func requestFromDB(icao: String, level: Int, onSuccess: @escaping (JSON) -> Void, onFailure: @escaping () -> Void) {
+        let bkey = String(icao.prefix(level))
+        let dkey = String(icao.suffix(icao.count - level))
+        let aircraftTypeURL = "http://piaware.local:8080/db/\(bkey).json"
+
+        AF.request(aircraftTypeURL, method: .get).responseData { response in
+            switch response.result {
+            case .success(let data):
+                let json = try! JSON(data: data)
+
+                if json[dkey].exists() {
+                    onSuccess(json[dkey])
+                } else if let children = json["children"].array, children.contains(where: { $0.stringValue == bkey + dkey.prefix(1) }) {
+                    requestFromDB(icao: icao, level: level + 1, onSuccess: onSuccess, onFailure: onFailure)
+                } else {
+                    onFailure()
+                }
+            case .failure:
+                onFailure()
+            }
+        }
+    }
+
+
+    func parsePiawareData(json: JSON) -> [Flight] {
+        let aircraftArray = json["aircraft"].arrayValue
+        var flights: [Flight] = []
+
+        for aircraft in aircraftArray {
+            let flight = Flight(
+                ident: aircraft["flight"].stringValue.trimmingCharacters(in: .whitespaces),
+                fa_flight_id: nil,
+                actual_off: nil,
+                actual_on: nil,
+                origin: nil,
+                destination: nil,
+                last_position: Flight.Position(
+                    fa_flight_id: nil,
+                    altitude: aircraft["alt_baro"].int,
+                    altitude_change: nil,
+                    groundspeed: aircraft["gs"].int,
+                    heading: aircraft["track"].int,
+                    latitude: aircraft["lat"].double,
+                    longitude: aircraft["lon"].double,
+                    timestamp: nil,
+                    update_type: nil
+                ),
+                aircraft_type: nil
+            )
+            flights.append(flight)
+        }
+
+        return flights
+    }
+
     func speakAircraftData() {
         stopSpeakingButton = false
         DispatchQueue.global(qos: .userInitiated).async {
