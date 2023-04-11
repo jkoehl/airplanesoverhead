@@ -1,3 +1,3 @@
 # airplanesoverhead
 
-<img src="./screenshot1.jpeg" alt="Screenshot 1" width="375">
+![Screenshot 1](./screenshot1.jpeg | width=375)
