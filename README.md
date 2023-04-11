@@ -15,7 +15,7 @@ text to speech APIs on iOS
 My goal was to see how far I could get with building a program **without writing the actual code**. And that is the code I have checked in here. I made it a point to not change the code it generated. The result is a working iOS app that I have uploaded here.
 
 # ChatGPT Sessions
-Take a look at the sessions I saved to see what my inputs were to ChatGPT and what it generated. This willl give some insight into how this came together and you will probably be suprised by what it can do.
+Take a look at the [saved sessions](https://github.com/jkoehl/airplanesoverhead/tree/main/ChatGPTSessions/) to see what my inputs were to ChatGPT and what it generated. This willl give some insight into how this came together and you will probably be suprised by what it can do.
 
 <img src="./Screenshot1.jpeg" alt="Screenshot 1" width="375">
 
