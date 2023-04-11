@@ -14,6 +14,17 @@ text to speech APIs on iOS
 
 My goal was to see how far I could get with building a program **without writing the actual code**. And that is the code I have checked in here. I made it a point to not change the code it generated. The result is a working iOS app that I have uploaded here.
 
+# Features
+Over the course of several chat sessions I kept asking for new features incrementally once it had created a working initial version.
+
+- Fetches data from FlightAware API upon tapping the airplane button tap
+- Selectable range form the user's current location to limit the search
+- List view of the aircraft found
+- Speaks the aircraft information
+- Renders each aircraft location on a map view
+- Uses manufacturer lookups to turn aircraft codes into full aircraft names
+- Support alternate data source of a local Piaware device to get similar information using a local ADS-B receiver on your local network (saves FlightAware API costs)
+
 # ChatGPT Sessions
 Take a look at the [saved sessions](https://github.com/jkoehl/airplanesoverhead/tree/main/ChatGPTSessions/) to see what my inputs were to ChatGPT and what it generated. This willl give some insight into how this came together and you will probably be suprised by what it can do.
 
