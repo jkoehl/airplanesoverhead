@@ -1,3 +1,3 @@
 # airplanesoverhead
 
-![Alt text](Screenshot1.jpeg?raw=true "Screenshot"| width=500)
+<img src="./screenshot1.jpeg" alt="Screenshot 1" width="375">
