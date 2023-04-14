@@ -3,6 +3,8 @@
 # Overview
 iOS App that announces aircraft that are flying overhead. I am an aviation enthusiast and planes fly oveer my house a lot so I thought of a silly app that I could have my phone automatically tell me what plane just flew overhead and its altitude, speed, and when possible its origin and destination.
 
+Warning: There are bugs in this even though it does actually work to a large degree. I wanted to preserve the fact that this was written by ChatGPT but I did not keep at it and elimnate all of the bugs.
+
 # Background
 This is a hobby iOS project idea where I used ChatGPT to write all of the code starting with:
 
